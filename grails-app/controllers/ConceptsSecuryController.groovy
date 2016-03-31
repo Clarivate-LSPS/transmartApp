@@ -56,17 +56,19 @@ class ConceptsSecuryController {
             if (parent.cVisualattributes == 'FAS') {
                 def fmFolderAssociation = FmFolderAssociation.findByObjectUid("EXP:${parent.sourcesystemCd}")
                 def filesList = fmFolderAssociation?.fmFolder?.fmFiles
-                result.add(new resJSON(
-                        key: parent.key + 'Files\\',
-                        level: parent.level + 1,
-                        fullName: parent.fullName + 'Files\\',
-                        name: 'Files',
-                        tooltip: parent.tooltip + 'Files\\',
-                        visualAttributes: ["FOLDER", "ACTIVE"],
-                        metadata: "",
-                        dimensionCode: parent.dimensionCode + 'Files\\',
-                        dimensionTableName: "FILE"
-                ))
+                if (filesList && filesList.size() > 0) {
+                    result.add(new resJSON(
+                            key: parent.key + 'Files\\',
+                            level: parent.level + 1,
+                            fullName: parent.fullName + 'Files\\',
+                            name: 'Files',
+                            tooltip: parent.tooltip + 'Files\\',
+                            visualAttributes: ["FOLDER", "ACTIVE"],
+                            metadata: "",
+                            dimensionCode: parent.dimensionCode + 'Files\\',
+                            dimensionTableName: "FILE"
+                    ))
+                }
             }
         } else {
             parentConceptKey = ((String)parentConceptKey).substring(0, filesIndexOf)
