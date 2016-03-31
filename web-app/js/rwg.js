@@ -2652,3 +2652,17 @@ function updateAnalysisData(analysisId, full) {
 jQuery.ajaxSetup({
 	cache: false
 });
+
+
+jQuery(document).ready(function() {
+	jQuery('body').on('click', '#files-table .addall', function () {
+		var nameelements = jQuery(this).closest('table').find('.foldericon.addcart');
+		var ids = [];
+		for (var i = 0; i < nameelements.size(); i++) {
+			var id = nameelements[i];
+			ids.push(jQuery(id).attr('name'));
+		}
+
+		window.open(pageInfo.basePath + '/fileExport/export?id=' + ids.join(','));
+	});
+});
