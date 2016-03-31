@@ -419,8 +419,14 @@ addObservationTag = function(observationName, sourceAndCode, escapedFieldName) {
 
 jQuery(document).ready(function() {
 
-    jQuery('#uploadFilePane').hide();
-    jQuery('#uploadFileButton').hide();
+    jQuery('#uploadAnalysisPane').hide();
+    jQuery('#enterMetadataButton').hide();
+    jQuery('#uploadFileButton').show();
+    jQuery('#uploadFilePane').show();
+    jQuery('#studyDiv').empty().slideUp('slow');
+    changeField('study-combobox', 'study');
+    jQuery('#formPage2').hide();
+    jQuery('#formPage1').show();
 
     jQuery('body').on('click', '.sidebarRadio', function() {
         jQuery('.sidebarRadio').removeClass('selected');

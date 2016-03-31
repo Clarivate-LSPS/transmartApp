@@ -85,7 +85,7 @@
 
 <div id="mainUploadPane">
 <g:uploadForm name="dataUpload" action="upload" method="post">
-    <div id="formPage1" class="formPage">
+    <div id="formPage1" class="formPage" style="display: none;">
 
         <div class="dataFormTitle" id="dataFormTitle1">
             <g:if test="${uploadDataInstance?.id ? true : false}">
@@ -127,44 +127,44 @@
                 </td>
             </tr>
         </table>
-        <div id="uploadAnalysisPane">
-            <table class="uploadTable">
-                <tr>
-                    <td width="10%">
-                        Analysis Type to Upload:<br/>
-                    </td>
-                    <td width="90%">
-                        <div id="dataTypeErrors">
-                            <g:eachError bean="${uploadDataInstance}" field="dataType">
-                                <div class="fieldError"><g:message error="${it}"/></div>
-                            </g:eachError>
-                        </div>
-                        <g:select name="dataType" name="dataType" noSelection="${['null':'Select...']}" from="${['GWAS':'GWAS','Metabolic GWAS':'GWAS Metabolomics','EQTL':'eQTL']}" optionKey="${{it.key}}" optionValue="${{it.value}}" value="${uploadDataInstance?.dataType}"/>
-                        <a class="upload" href="#" onclick="downloadTemplate();">Download Template</a>
-                    </td>
-                </tr>
+        %{--<div id="uploadAnalysisPane">--}%
+            %{--<table class="uploadTable">--}%
+                %{--<tr>--}%
+                    %{--<td width="10%">--}%
+                        %{--Analysis Type to Upload:<br/>--}%
+                    %{--</td>--}%
+                    %{--<td width="90%">--}%
+                        %{--<div id="dataTypeErrors">--}%
+                            %{--<g:eachError bean="${uploadDataInstance}" field="dataType">--}%
+                                %{--<div class="fieldError"><g:message error="${it}"/></div>--}%
+                            %{--</g:eachError>--}%
+                        %{--</div>--}%
+                        %{--<g:select name="dataType" name="dataType" noSelection="${['null':'Select...']}" from="${['GWAS':'GWAS','Metabolic GWAS':'GWAS Metabolomics','EQTL':'eQTL']}" optionKey="${{it.key}}" optionValue="${{it.value}}" value="${uploadDataInstance?.dataType}"/>--}%
+                        %{--<a class="upload" href="#" onclick="downloadTemplate();">Download Template</a>--}%
+                    %{--</td>--}%
+                %{--</tr>--}%
 
-                <tr>
-                    <td>
-                        Analysis Name:
-                    </td>
-                    <td>
-                        <div id="analysisNameErrors">
-                            <g:eachError bean="${uploadDataInstance}" field="analysisName">
-                                <div class="fieldError"><g:message error="${it}"/></div>
-                            </g:eachError>
-                        </div>
-                        <g:textField name="analysisName" style="width: 90%" value="${uploadDataInstance.analysisName}"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Analysis Description:</td>
-                    <td colspan="3">
-                        <g:textArea name="description" style="width: 90%; height: 100px">${uploadDataInstance.description}</g:textArea>
-                    </td>
-                </tr>
-            </table>
-        </div>
+                %{--<tr>--}%
+                    %{--<td>--}%
+                        %{--Analysis Name:--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                        %{--<div id="analysisNameErrors">--}%
+                            %{--<g:eachError bean="${uploadDataInstance}" field="analysisName">--}%
+                                %{--<div class="fieldError"><g:message error="${it}"/></div>--}%
+                            %{--</g:eachError>--}%
+                        %{--</div>--}%
+                        %{--<g:textField name="analysisName" style="width: 90%" value="${uploadDataInstance.analysisName}"/>--}%
+                    %{--</td>--}%
+                %{--</tr>--}%
+                %{--<tr>--}%
+                    %{--<td>Analysis Description:</td>--}%
+                    %{--<td colspan="3">--}%
+                        %{--<g:textArea name="description" style="width: 90%; height: 100px">${uploadDataInstance.description}</g:textArea>--}%
+                    %{--</td>--}%
+                %{--</tr>--}%
+            %{--</table>--}%
+        %{--</div>--}%
 
         <div id="uploadFilePane">
             <table class="uploadTable">
@@ -212,7 +212,7 @@
         </div>
     </div>
 
-    <div id="formPage2" class="formPage" style="display: none;">
+    <div id="formPage2" class="formPage">
 
         <div class="dataFormTitle" id="dataFormTitle2">Upload Data</div>
         <div style="position: relative; text-align:right;">
@@ -420,14 +420,14 @@
             <h2 style="float:left" class="title">Upload target</h2>
         </div>
         <ul class="dynatree-container">
-            <li class="sidebarRadio" id="uploadAnalysisRadio">
-                <span class="dynatree-node dynatree-folder dynatree-exp-c dynatree-ico-cf">
-                    <span class="dynatree-no-connector">
+            %{--<li class="sidebarRadio" id="uploadAnalysisRadio">--}%
+                %{--<span class="dynatree-node dynatree-folder dynatree-exp-c dynatree-ico-cf">--}%
+                    %{--<span class="dynatree-no-connector">--}%
 
-                    </span>
-                    <a class="dynatree-title">Upload analysis data</a>
-                </span>
-            </li>
+                    %{--</span>--}%
+                    %{--<a class="dynatree-title">Upload analysis data</a>--}%
+                %{--</span>--}%
+            %{--</li>--}%
             %{--<li class="sidebarRadio" id="uploadFileRadio">--}%
             %{--<span class="dynatree-node dynatree-folder dynatree-exp-c dynatree-ico-cf">--}%
             %{--<span class="dynatree-no-connector"></span>--}%
@@ -437,7 +437,7 @@
             <li class="sidebarRadio" id="uploadFileDatasetExplorerRadio">
                 <span class="dynatree-node dynatree-folder dynatree-exp-c dynatree-ico-cf">
                     <span class="dynatree-no-connector"></span>
-                    <a class="dynatree-title">Upload file to Dataset Explorer</a>
+                    <a class="dynatree-title">Upload File</a>
                 </span>
             </li>
         </ul>
