@@ -281,7 +281,7 @@ function applyStudyBrowse() {
           updateStudyTable(studyId);
       
       //This destroys our popup window.
-      jQuery(this).dialog("destroy");
+      jQuery('#divBrowseStudies').dialog("destroy");
 });
 
 //For all tags - when clicked, call the remove tag function (remove them from the DOM and underlying select list)
