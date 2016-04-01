@@ -2016,7 +2016,32 @@ function fileRightClick(eventNode, event) {
                     var fileId = Ext.decode(eventNode.attributes.metadata).fileId;
                     window.open(pageInfo.basePath + '/fileExport/exportFile/' + fileId);
                 }
-                }
+                },
+				{
+					text: 'Delete file', handler: function () {
+						var fileId = Ext.decode(eventNode.attributes.metadata).fileId;
+						if (confirm("Are you sure you want to delete this file?")) {
+							jQuery.ajax({
+								url: deleteFileURL,
+								data: {id: fileId},
+								success: function (response) {
+									Ext.getCmp('navigateTermsPanel').destroy();
+									setupOntTree('navigateTermsPanel', 'Navigate Terms');
+
+									jQuery.ajax(pageInfo.basePath + '/concepts/getCategories', {
+										dataType : 'json'
+									})
+										.always(getCategoriesComplete).always(getPreviousQueries)
+
+
+								},
+								error: function (xhr) {
+									alert(xhr.message);
+								}
+							});
+						}
+					}
+				}
             ]
         });
     }
