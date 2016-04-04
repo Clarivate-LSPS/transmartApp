@@ -292,6 +292,10 @@ table.menuDetail th.menuVisited {
 .greybutton.deletefolder { background-image: url('../images/bin_closed.png'); }
 .greybutton.deleteprogram { background-image: url('../images/bin_closed.png'); }
 .greybutton.deletestudy { background-image: url('../images/bin_closed.png'); }
+.deletefilespan.foldericon.deletefile.link {
+	background-image: url('../images/bin_closed.png');
+	text-decoration: none;
+}
 
 .greybutton.disabled {
 	cursor: default;
