@@ -866,6 +866,7 @@ jQuery(document).ready(function() {
 	jQuery('#metadata-viewer').on('click', '.deletestudy', function() {
 
 		var id = jQuery(this).attr('name');
+		var parent = jQuery('#parentId').val();
 		if (confirm("Are you sure you want to delete this study?")) {
 			findChildByParent(id, function(hasChildren){
 				if (hasChildren){
@@ -877,7 +878,10 @@ jQuery(document).ready(function() {
 					url:deleteStudyURL,
 					data: {id: id},
 					success: function(response) {
-						alert('Success');
+						updateFolder(parent);
+						showDetailDialog(parent);
+						jQuery('.result-folder-name').removeClass('selected');
+						jQuery('#result-folder-name-' + parent).addClass('selected');
 					},
 					error: function(xhr) {
 						alert(xhr.message);
@@ -902,7 +906,8 @@ jQuery(document).ready(function() {
 					url:deleteProgramURL,
 					data: {id: id},
 					success: function(response) {
-						alert('Success');
+						showSearchResults();
+						goWelcome();
 					},
 					error: function(xhr) {
 						alert(xhr.message);
