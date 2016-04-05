@@ -2666,6 +2666,10 @@ jQuery(document).ready(function() {
 		window.open(pageInfo.basePath + '/fileExport/export?id=' + ids.join(','));
 	});
 
+	jQuery('body').on('click', '#files-table .addcart', function () {
+		window.open(pageInfo.basePath + '/fileExport/export?id=' + jQuery(this).attr('name'));
+	});
+
 	jQuery('body').on('click', '#files-table .deletefile', function () {
 		var id = jQuery(this).attr('name');
 		var deleteFileObject = jQuery(this);

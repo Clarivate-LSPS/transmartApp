@@ -296,6 +296,10 @@ table.menuDetail th.menuVisited {
 	background-image: url('../images/bin_closed.png');
 	text-decoration: none;
 }
+.exportaddspan.foldericon.addcart.link{
+	background-image: url('../images/fileexport.png');
+	text-decoration: none;
+}
 
 .greybutton.disabled {
 	cursor: default;

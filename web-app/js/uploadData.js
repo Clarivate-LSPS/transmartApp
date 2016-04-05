@@ -278,7 +278,7 @@ function applyStudyBrowse() {
     	  var studyName = $j('#studyBrowseName' + studyId).text();
     	  $j('#study-input').val(studyName).attr('disabled', 'disabled');
     	  $j('#study').val(studyId);
-          updateStudyTable(studyId);
+          //updateStudyTable(studyId);
       
       //This destroys our popup window.
       jQuery('#divBrowseStudies').dialog("destroy");
