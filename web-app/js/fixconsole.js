@@ -1,6 +1,6 @@
 
 // avoid console errors w/ no firebug
-if (!window.console || !console.firebug)
+if (!window.console || !console.log)
 {
     var names = ["log", "debug", "info", "warn", "error", "assert", "dir", "dirxml",
         "group", "groupEnd", "time", "timeEnd", "count", "trace", "profile", "profileEnd"];
