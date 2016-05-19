@@ -72,7 +72,7 @@ input.dataFile, snpDataExists, multipleStudies, study
   filename <- "clinical_i2b2trans.txt"
 	if (multipleStudies) filename <- paste(study, "_clinical_i2b2trans.txt")
 	#Write the final data file.
-	write.matrix(finalData,filename,sep = "\t")
+	write.table(finalData,filename,sep = "\t", quote = F, col.names = T, row.names = F)
   
   file.remove(input.dataFile)
 }
