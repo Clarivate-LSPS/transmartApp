@@ -11,6 +11,7 @@ import org.springframework.security.saml.SAMLCredential
 import org.springframework.security.saml.userdetails.SAMLUserDetailsService
 import org.springframework.transaction.TransactionStatus
 import org.transmart.searchapp.AuthUser
+import org.transmart.searchapp.Role
 import org.transmartproject.core.exceptions.UnexpectedResultException
 
 import javax.annotation.Resource
@@ -111,6 +112,13 @@ public class FederatedUserDetailsService implements SAMLUserDetailsService {
 
             AuthUser newUser = AuthUser.createFederatedUser(federatedId,
                     username, realName, email, sessionFactory.currentSession);
+
+            if (attributeConfig.newUserAuthorities) {
+                // if new user authorities specified then replace default authorities
+                newUser.authorities.findAll().each { newUser.removeFromAuthorities(it) }
+                Role.findAllByAuthorityInList(attributeConfig.newUserAuthorities).each { newUser.addToAuthorities(it) }
+            }
+
             def outcome = newUser.save(flush: true)
             if (outcome) {
                 log.info("Created new user. {federatedId=$federatedId, " +

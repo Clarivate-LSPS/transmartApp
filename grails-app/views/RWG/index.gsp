@@ -64,6 +64,11 @@
 
 <tmpl:/RWG/urls/>
 <script type="text/javascript" charset="utf-8">
+
+    var pageInfo = {
+        basePath: "${request.getContextPath()}"
+    }
+
     var mouse_inside_options_div = false;
     var sessionSearch = "${rwgSearchFilter}";
     var sessionOperators = "${rwgSearchOperators}";

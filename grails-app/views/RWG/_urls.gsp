@@ -61,8 +61,12 @@
     var welcomeURL = "${createLink([controller:'RWG', action:'ajaxWelcome'])}";
     var searchLogURL = "${createLink([controller:'RWG', action:'searchLog'])}";
 
+    var folderFilesURL = "${createLink([controller:'fmFolder',action:'getFolderFiles'])}";
     var deleteFileURL = "${createLink([controller:'fmFolder',action:'deleteFile'])}";
     var deleteFolderURL = "${createLink([controller:'fmFolder',action:'deleteFolder'])}";
+    var deleteStudyURL = "${createLink([controller:'fmFolder',action:'deleteStudy'])}";
+    var deleteProgramURL = "${createLink([controller:'fmFolder',action:'deleteProgram'])}";
+    var hasChildrenURL = "${createLink([controller:'fmFolder',action:'hasChildren'])}";
 
     var updateSearchCategoryURL = "${createLink([controller:'RWG', action:'updateSearchCategory'])}";
 

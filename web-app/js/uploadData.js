@@ -274,14 +274,14 @@ function downloadTemplate() {
 function applyStudyBrowse() {
       //Loop through all the selected items.
       jQuery(".studyBrowseRow.selected").each(function(i, selected){
-    	  var studyId = $j(this).attr('name');
+    	  var studyId = $j(this).attr('id');
     	  var studyName = $j('#studyBrowseName' + studyId).text();
     	  $j('#study-input').val(studyName).attr('disabled', 'disabled');
     	  $j('#study').val(studyId);
-          updateStudyTable(studyId);
+          //updateStudyTable(studyId);
       
       //This destroys our popup window.
-      jQuery(this).dialog("destroy");
+      jQuery('#divBrowseStudies').dialog("destroy");
 });
 
 //For all tags - when clicked, call the remove tag function (remove them from the DOM and underlying select list)
@@ -419,8 +419,14 @@ addObservationTag = function(observationName, sourceAndCode, escapedFieldName) {
 
 jQuery(document).ready(function() {
 
-    jQuery('#uploadFilePane').hide();
-    jQuery('#uploadFileButton').hide();
+    jQuery('#uploadAnalysisPane').hide();
+    jQuery('#enterMetadataButton').hide();
+    jQuery('#uploadFileButton').show();
+    jQuery('#uploadFilePane').show();
+    jQuery('#studyDiv').empty().slideUp('slow');
+    changeField('study-combobox', 'study');
+    jQuery('#formPage2').hide();
+    jQuery('#formPage1').show();
 
     jQuery('body').on('click', '.sidebarRadio', function() {
         jQuery('.sidebarRadio').removeClass('selected');
@@ -440,7 +446,7 @@ jQuery(document).ready(function() {
         }
         else {
             if (jQuery(this).attr('id') == 'uploadFileDatasetExplorerRadio') {
-                UPLOAD_STUDY_TYPE = 'i2b2';
+                UPLOAD_STUDY_TYPE = 'i2b2,Experiment';     // added Experiment for support study that uploaded by tmdataloader
                 jQuery('.dataFormTitle').text("Upload File to Dataset Explorer");
             }
             else if (jQuery(this).attr('id') == 'uploadFileRadio') {

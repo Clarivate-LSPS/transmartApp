@@ -13,7 +13,7 @@ class ExperimentController {
         def value = params.term.toUpperCase();
         def studyType = params.studyType?.toUpperCase();
 
-        def experiments = Experiment.executeQuery("SELECT accession, title FROM Experiment e WHERE upper(e.title) LIKE '%' || :term || '%' AND upper(e.type) = :studyType", [term: value, studyType: studyType], [max: 20]);
+        def experiments = Experiment.executeQuery("SELECT accession, title FROM Experiment e WHERE upper(e.title) LIKE '%' || :term || '%' AND upper(e.type) in :studyType", [term: value, studyType: studyType.split(',')], [max: 20]);
 
         def category = "STUDY"
         def categoryDisplay = "Study"
@@ -37,7 +37,7 @@ class ExperimentController {
         def experiments
 
         if (params.type) {
-            experiments = Experiment.findAllByType(params.type)
+            experiments = Experiment.findAllByTypeInList((List)params.type.split(','))
             experiments = getSortedList(experiments)
         } else {
             experiments = Experiment.list()

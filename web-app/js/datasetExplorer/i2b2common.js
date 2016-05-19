@@ -1924,6 +1924,7 @@ function getTreeNodeFromJsonNode(concept)
  		var oktousevaluesnode	= 	null;
  		var oktousevalues		=	null;
         var visualattributes    =   null;
+		var metadata			= 	null;
 
     level				= concept.level;
     key					= concept.key;
@@ -1932,6 +1933,7 @@ function getTreeNodeFromJsonNode(concept)
     dimcode				= concept.dimensionCode;
     tablename			= concept.dimensionTableName;
     visualattributes	= concept.visualAttributes;
+	metadata			= concept.metadata;
 
     comment				= ''; //XXX
     normalunits			= concept.metadata && concept.metadata.unitValues
@@ -1975,6 +1977,13 @@ function getTreeNodeFromJsonNode(concept)
         iconCls="programicon";
     }
 
+	if (visualattributes.indexOf('FILE') != '-1') {
+		var jObj = Ext.decode(metadata)
+        iconCls="fileicon " + jObj.fileType;
+		leaf = true;
+		draggable=false;
+    }
+
     if (visualattributes.indexOf('STUDY') != '-1') {
         iconCls="studyicon";
     }
@@ -2014,9 +2023,14 @@ function getTreeNodeFromJsonNode(concept)
             normalunits: normalunits,
             oktousevalues: oktousevalues,
             expanded: expand,
-            visualattributes : visualattributes
+            visualattributes : visualattributes,
+			metadata: metadata
    		 });
-   		 newnode.addListener('contextmenu',ontologyRightClick);
+		if (visualattributes.indexOf('FILE') == '-1') {
+			newnode.addListener('contextmenu', ontologyRightClick);
+		} else {
+			newnode.addListener('contextmenu', fileRightClick);
+		}
 	return newnode;
 	}
 

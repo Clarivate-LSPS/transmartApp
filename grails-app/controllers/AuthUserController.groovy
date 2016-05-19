@@ -135,7 +135,7 @@ class AuthUserController {
             }
 
             person.passwd = springSecurityService.encodePassword(params.passwd)
-        } else  {
+        } else if ( !person.passwd ) {
             flash.message = 'Password must be provided';
             return render(view: create ? 'create' : 'edit', model: buildPersonModel(person))
         }

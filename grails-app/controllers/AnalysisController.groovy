@@ -494,9 +494,9 @@ class AnalysisController {
     }
 
     def getGenePatternFile = {
-        def fileName = params.file
-        def outputFile = new File(getGenePatternFileDirName(), fileName)
-        if (outputFile.exists()) {
+        def fileName = params.file as String
+        def outputFile = fileName ? new File(getGenePatternFileDirName(), fileName) : null
+        if (outputFile?.exists()) {
             outputFile.eachLine {
                 response.outputStream.println(it)
             }

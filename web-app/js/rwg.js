@@ -2652,3 +2652,50 @@ function updateAnalysisData(analysisId, full) {
 jQuery.ajaxSetup({
 	cache: false
 });
+
+
+jQuery(document).ready(function() {
+	jQuery('body').on('click', '#files-table .addall', function () {
+		var nameelements = jQuery(this).closest('table').find('.foldericon.addcart');
+		var ids = [];
+		for (var i = 0; i < nameelements.size(); i++) {
+			var id = nameelements[i];
+			ids.push(jQuery(id).attr('name'));
+		}
+
+		window.open(pageInfo.basePath + '/fileExport/export?id=' + ids.join(','));
+	});
+
+	jQuery('body').on('click', '#files-table .addcart', function () {
+		window.open(pageInfo.basePath + '/fileExport/export?id=' + jQuery(this).attr('name'));
+	});
+
+	jQuery('body').on('click', '#files-table .deletefile', function () {
+		var id = jQuery(this).attr('name');
+		var deleteFileObject = jQuery(this);
+		if (confirm("Are you sure you want to delete this file?")) {
+			jQuery.ajax({
+				url: deleteFileURL,
+				data: {id: id},
+				success: function (response) {
+					//Reload the contents of the clicked table!
+					var targetElement = deleteFileObject.closest('.filelisttable');
+					var folderId = targetElement.attr('name');
+					jQuery.ajax({
+						url: folderFilesURL,
+						data: {folderId:folderId},
+						success: function (response) {
+							jQuery(targetElement).html(response);
+						},
+						error: function (xhr) {
+							console.log('Error!  Status = ' + xhr.status + xhr.statusText);
+						}
+					});
+				},
+				error: function (xhr) {
+					alert(xhr.message);
+				}
+			});
+		}
+	});
+});

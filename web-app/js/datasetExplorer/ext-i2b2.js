@@ -5,7 +5,7 @@ Ext.ux.OntologyTreeLoader = Ext.extend(Ext.tree.TreeLoader, {
 
             this.transId = Ext.Ajax.request({
                 method: 'GET',
-                url: pageInfo.basePath + "/conceptsSecury/getChildren",
+                url: pageInfo.basePath + "/secureConcepts/getChildren",
                 params: { concept_key: node.id },
                 success: this.handleResponse,
                 failure: this.handleFailure,
