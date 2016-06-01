@@ -43,7 +43,7 @@ class I2b2HelperService {
     def conceptService
     def conceptsResourceService
     def sampleInfoService
-
+    def uploadedFilesService
     /**
      * Gets a distribution of information from the patient dimention table for value columns
      */
@@ -4964,6 +4964,7 @@ class I2b2HelperService {
             ls.put(keyToPath(conceptkey), row.secure_obj_token);
             log.trace("@@found" + conceptkey);
         })
+        ls.putAll(uploadedFilesService.getNodePermissions(concept_key))
         return ls;
     }
 

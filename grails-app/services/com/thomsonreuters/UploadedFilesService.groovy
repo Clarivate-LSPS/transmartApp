@@ -11,6 +11,7 @@ import org.transmartproject.core.ontology.OntologyTerm
 @Transactional
 class UploadedFilesService {
     def conceptsResourceService
+    def i2b2HelperService
 
     private static final String FILES_CONCEPT_NAME = "Files"
 
@@ -75,5 +76,22 @@ class UploadedFilesService {
         String metadata
         String dimensionCode
         String dimensionTableName
+    }
+
+    def getNodePermissions(String conceptKey) {
+        def studyNode = getStudyNodeByConceptKey(conceptKey)
+        if (isFilesConcept(conceptKey)) {
+            def fmFolderAssociation = FmFolderAssociation.findByObjectUid("EXP:${studyNode.sourcesystemCd}")
+            def filesList = fmFolderAssociation?.fmFolder?.fmFiles
+            def i2b2Secure = org.transmartproject.db.ontology.I2b2Secure.findByNameAndFullName(studyNode.name, studyNode.fullName)
+
+            return filesList.collectEntries{
+                [(studyNode.fullName + FILES_CONCEPT_NAME + '\\' + it.displayName) : i2b2Secure.secureObjectToken]
+            }
+        } else if (studyNode) {
+            def i2b2Secure = org.transmartproject.db.ontology.I2b2Secure.findByNameAndFullName(studyNode.name, studyNode.fullName)
+            return [(i2b2HelperService.keyToPath(conceptKey + FILES_CONCEPT_NAME + '\\')): i2b2Secure.secureObjectToken]
+        }
+        [:]
     }
 }
