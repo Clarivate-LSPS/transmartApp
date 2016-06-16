@@ -44,7 +44,7 @@ class SecureConceptsResourceService {
                       i2b2metadata.i2b2_secure
                     where
                       secure_obj_token = 'EXP:PUBLIC'
-                ) where accession in (${(['?'] * accession.size()).join(',')})
+                ) foo where accession in (${(['?'] * accession.size()).join(',')})
             """, [userid] + accession).accession as Set
         }
 
