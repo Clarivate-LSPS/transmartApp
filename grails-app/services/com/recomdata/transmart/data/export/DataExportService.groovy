@@ -5,6 +5,10 @@ import com.recomdata.transmart.data.export.exception.DataNotFoundException
 import groovy.json.JsonSlurper
 import org.apache.commons.lang.StringUtils
 import org.springframework.transaction.annotation.Transactional
+import org.transmartproject.core.ontology.Study
+import org.transmartproject.core.users.User
+
+import static org.transmartproject.core.users.ProtectedOperation.WellKnownOperations.EXPORT
 
 class DataExportService {
 
@@ -243,5 +247,25 @@ class DataExportService {
             }
         }
 
+    }
+
+
+    boolean isUserAllowedToExport(final User user, final List<Long> resultInstanceIds) {
+        assert user
+        assert resultInstanceIds
+        // check that the user has export access in the studies of patients
+        Set<Study> studies = resultInstanceIds.findAll().collect {
+            queriesResourceAuthorizationDecorator.getQueryResultFromId it
+        }*.patients.
+            inject { a, b -> a + b }. // merge two patient sets into one
+            inject([] as Set, { a, b -> a + b.trial }).
+            collect { studiesResourceService.getStudyById it }
+
+        Study forbiddenExportStudy = studies.find { Study study ->
+            if (!user.canPerform(EXPORT, study)) {
+                return true
+            }
+        }
+        !forbiddenExportStudy
     }
 }

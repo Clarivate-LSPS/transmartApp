@@ -45,7 +45,11 @@ grails.project.dependency.resolution = {
             mavenCentral()
 
             mavenRepo "https://repo.transmartfoundation.org/content/repositories/public/"
-            mavenRepo "https://repo.thehyve.nl/content/repositories/public/"
+
+            // -- Genome Browser plugin --
+            //   to inclue the plugin, uncomment the following line
+            //   and see related comment block below 
+            // mavenRepo "https://repo.thehyve.nl/content/repositories/public/"
         }
     } else {
         dm.configureRepositories delegate
@@ -58,7 +62,7 @@ grails.project.dependency.resolution = {
 
         runtime 'org.javassist:javassist:3.16.1-GA'
 
-        compile 'org.transmartproject:transmart-core-api:1.2.4'
+        compile 'org.transmartproject:transmart-core-api:16.1'
 
         compile 'antlr:antlr:2.7.7'
         compile 'net.sf.opencsv:opencsv:2.3'
@@ -72,6 +76,11 @@ grails.project.dependency.resolution = {
         }
         compile 'org.rosuda:Rserve:1.7.3'
         compile 'com.google.guava:guava:14.0.1'
+        compile 'net.sf.ehcache:ehcache:2.9.0'
+
+        compile 'org.apache.httpcomponents:httpclient:4.2.4'
+        compile 'org.apache.solr:solr-solrj:5.4.1'
+        compile 'org.apache.solr:solr-core:5.4.1'
 
         /* we need at least servlet-api 2.4 because of HttpServletResponse::setCharacterEncoding */
         compile "javax.servlet:servlet-api:$grails.servlet.version" /* delete from the WAR afterwards */
@@ -111,13 +120,14 @@ grails.project.dependency.resolution = {
         build ':rest-client-builder:2.0.1'
         build ':tomcat:7.0.52.1'
 
-        compile ':hibernate:3.6.10.10'
+        compile ':hibernate:3.6.10.16'
+        compile ':cache-ehcache:1.0.5'
         compile ':quartz:1.0-RC2'
         // Not compatible with spring security 3.2 yet
         //compile ':spring-security-kerberos:0.1'
         compile ':spring-security-ldap:2.0-RC2'
-        compile ':spring-security-core:2.0-RC4'
-        compile ':spring-security-oauth2-provider:1.0.5.2'
+        compile ':spring-security-core:2.0-RC5'
+        compile ':spring-security-oauth2-provider:2.0-RC4'
 
         runtime ':prototype:1.0'
         runtime ':jquery:1.7.1'
@@ -127,27 +137,30 @@ grails.project.dependency.resolution = {
         compile ":codenarc:0.21"
 
         if (!dm) {
-            compile ':rdc-rmodules:1.2.4'
-            runtime ':transmart-core:1.2.4'
-            compile ':transmart-gwas:1.2.4'
+            compile ':rdc-rmodules:16.1'
+            runtime ':transmart-core:16.1'
+            compile ':transmart-gwas:16.1'
             //// already included in transmart-gwas
-            //compile ':transmart-legacy-db:1.2.4'
+            //compile ':transmart-legacy-db:16.1'
             //// already included in transmart-gwas
-            //compile ':folder-management:1.2.4'
+            //compile ':folder-management:16.1'
             //// already included in transmart-gwas, folder-management
-            //compile ':search-domain:1.2.4'
+            //compile ':search-domain:16.1'
             //// already included in search-domain, transmart-gwas,
             //                       folder-management
-            //compile ':biomart-domain:1.2.4'
+            //compile ':biomart-domain:16.1'
             //// already included in biomart-domain
-            //compile ':transmart-java:1.2.4'
-            runtime ':dalliance-plugin:0.2-SNAPSHOT'
-            runtime ':transmart-mydas:0.1-SNAPSHOT'
-            runtime ':transmart-rest-api:1.2.4'
-            runtime ':blend4j-plugin:1.2.4'
-            runtime ':transmart-metacore-plugin:1.2.4'
+            //compile ':transmart-java:16.1'
+            // -- Genome Browser plugin --
+            //   to inclue the plugin, uncomment the following two lines
+            //   and see related comment block above 
+            // runtime ':dalliance-plugin:unknown'
+            // runtime ':transmart-mydas:unknown'
+            runtime ':transmart-rest-api:16.1'
+            runtime ':blend4j-plugin:16.1'
+            runtime ':transmart-metacore-plugin:16.1'
 
-            test ':transmart-core-db-tests:1.2.4'
+            test ':transmart-core-db-tests:16.1'
         } else {
             dm.internalDependencies delegate
         }

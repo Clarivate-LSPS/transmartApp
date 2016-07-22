@@ -80,7 +80,11 @@ beans = {
 
     sessionRegistry(SessionRegistryImpl)
     sessionAuthenticationStrategy(ConcurrentSessionControlStrategy, sessionRegistry) {
-        maximumSessions = 10
+        if (grailsApplication.config.org.transmartproject.maxConcurrentUserSessions) {
+                maximumSessions = grailsApplication.config.org.transmartproject.maxConcurrentUserSessions
+        } else {
+                maximumSessions = 10
+        }
     }
     concurrentSessionFilter(ConcurrentSessionFilter) {
         sessionRegistry = sessionRegistry
@@ -157,7 +161,11 @@ beans = {
     if (!('clientCredentialsAuthenticationProvider' in
             grailsApplication.config.grails.plugin.springsecurity.providerNames)) {
         SpringSecurityOauth2ProviderGrailsPlugin.metaClass.getDoWithSpring = { ->
-            logger.info "Skipped Oauth2 Grails plugin initialization"
+            logger.info "Skipped Oauth2 Grails plugin initialization (doWithSpring)"
+            return {}
+        }
+        SpringSecurityOauth2ProviderGrailsPlugin.metaClass.getDoWithApplicationContext = { ->
+            logger.info "Skipped Oauth2 Grails plugin initialization (doWithApplicationContext)"
             return {}
         }
     }
@@ -173,6 +181,10 @@ beans = {
 
     badCredentialsEventListener(BadCredentialsEventListener) {
         bruteForceLoginLockService = ref('bruteForceLoginLockService')
+    }
+
+    acghBedExporterRgbColorScheme(org.springframework.beans.factory.config.MapFactoryBean) {
+        sourceMap = grailsApplication.config.dataExport.bed.acgh.rgbColorScheme
     }
 
     transmartExtensionsRegistry(ExtensionsRegistry) {

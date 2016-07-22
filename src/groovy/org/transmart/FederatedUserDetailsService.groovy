@@ -78,8 +78,12 @@ public class FederatedUserDetailsService implements SAMLUserDetailsService {
         }
     }
 
+    private def getSamlConfig() {
+        grailsApplication.config.org.transmart.security.saml
+    }
+
     private def getAttributeConfig() {
-        grailsApplication.config.org.transmart.security.saml.attribute
+        samlConfig.attribute
     }
 
     private void tryCreateUser(SAMLCredential credential, federatedId, nf) {
@@ -113,10 +117,10 @@ public class FederatedUserDetailsService implements SAMLUserDetailsService {
             AuthUser newUser = AuthUser.createFederatedUser(federatedId,
                     username, realName, email, sessionFactory.currentSession);
 
-            if (attributeConfig.newUserAuthorities) {
+            if (samlConfig.defaultRoles) {
                 // if new user authorities specified then replace default authorities
-                newUser.authorities.findAll().each { newUser.removeFromAuthorities(it) }
-                Role.findAllByAuthorityInList(attributeConfig.newUserAuthorities).each { newUser.addToAuthorities(it) }
+                newUser.authorities.clear()
+                Role.findAllByAuthorityInList(samlConfig.defaultRoles).each { newUser.addToAuthorities(it) }
             }
 
             def outcome = newUser.save(flush: true)

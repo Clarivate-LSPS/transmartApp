@@ -3,21 +3,24 @@ package com.recomdata.transmart.data.export
 import au.com.bytecode.opencsv.CSVWriter
 import com.google.common.collect.Iterators
 import com.google.common.collect.PeekingIterator
+import org.transmartproject.core.concept.ConceptKey
 import org.transmartproject.core.dataquery.TabularResult
 import org.transmartproject.core.dataquery.clinical.ClinicalVariableColumn
 import org.transmartproject.core.dataquery.clinical.ComposedVariable
 import org.transmartproject.core.dataquery.clinical.PatientRow
 import org.transmartproject.core.ontology.OntologyTerm
+import org.transmartproject.core.ontology.OntologyTermTag
 import org.transmartproject.core.ontology.Study
 import org.transmartproject.core.querytool.QueryResult
-import org.transmartproject.db.concept.ConceptKey
 
 import static org.transmartproject.core.dataquery.clinical.ClinicalVariable.NORMALIZED_LEAFS_VARIABLE
+
 class ClinicalExportService {
 
     def queriesResourceService
     def clinicalDataResourceService
     def studiesResourceService
+    def ontologyTermTagsResourceService
     def conceptsResourceService
 
     final static String DATA_FILE_NAME = 'data_clinical.tsv'
@@ -30,14 +33,14 @@ class ClinicalExportService {
 
     List<File> exportClinicalData(Map args) {
         String jobName = args.jobName
-
-        if (jobResultsService[jobName]["Status"] == "Cancelled") {
+        if (jobResultsService.isJobCancelled(jobName)) {
             return null
         }
 
         Long resultInstanceId = args.resultInstanceId as Long
         List<String> conceptKeys = args.conceptKeys
         File studyDir = args.studyDir
+        boolean exportMetaData = args.exportMetaData == null ? true : args.exportMetaData
 
         QueryResult queryResult = queriesResourceService.getQueryResultFromId(resultInstanceId)
         List<ComposedVariable> variables
@@ -51,6 +54,13 @@ class ClinicalExportService {
         def files = []
 
         files << exportClinicalDataToFile(queryResult, variables, studyDir, jobName)
+        if (exportMetaData) {
+            def terms = getRelatedOntologyTerms(variables)
+            def tagsFile = exportAllTags(terms, studyDir)
+            if (tagsFile) {
+                files << tagsFile
+            }
+        }
 
         files
     }
@@ -82,16 +92,14 @@ class ClinicalExportService {
 
             def firstRow = peekingIterator.peek()
             List headRowList = [SUBJ_ID_TITLE] +
-                    variables.collectMany {ComposedVariable var ->
-                        firstRow[var].collect {
-                            it.key.conceptPath
-                        }
+                    variables.collectMany { ComposedVariable var ->
+                        firstRow[var].collect { it.key.label }
                     }
 
             csvWriter.writeNext(headRowList as String[])
 
             while (peekingIterator.hasNext()) {
-                if (jobResultsService[jobName]["Status"] == "Cancelled") {
+                if (jobResultsService.isJobCancelled(jobName)) {
                     return null
                 }
                 def row = peekingIterator.next()
@@ -107,6 +115,26 @@ class ClinicalExportService {
         clinicalDataFile
     }
 
+    File exportAllTags(Set<OntologyTerm> terms, File studyDir) {
+        def tagsMap = ontologyTermTagsResourceService.getTags(terms, true)
+
+        if (tagsMap) {
+            def resultFile = new File(studyDir, META_FILE_NAME)
+
+            resultFile.withWriter { Writer writer ->
+                CSVWriter csvWriter = new CSVWriter(writer, COLUMN_SEPARATOR)
+                csvWriter.writeNext(META_FILE_HEADER as String[])
+                tagsMap.each { OntologyTerm keyTerm, List<OntologyTermTag> valueTags ->
+                    valueTags.each { OntologyTermTag tag ->
+                        csvWriter.writeNext([keyTerm.fullName, tag.name, tag.description] as String[])
+                    }
+                }
+            }
+
+            resultFile
+        }
+    }
+
     private Set<OntologyTerm> getRelatedOntologyTerms(List<ComposedVariable> variables) {
         variables.collect { ComposedVariable variable ->
             conceptsResourceService.getByKey(variable.key.toString())
@@ -118,8 +146,7 @@ class ClinicalExportService {
             def conceptKey = new ConceptKey(it)
             clinicalDataResourceService.createClinicalVariable(
                     NORMALIZED_LEAFS_VARIABLE,
-                    concept_path: conceptKey.conceptFullName.toString()
-            )
+                    concept_path: conceptKey.conceptFullName.toString())
         }
     }
 
@@ -127,9 +154,7 @@ class ClinicalExportService {
         queriedStudies.collect { Study study ->
             clinicalDataResourceService.createClinicalVariable(
                     NORMALIZED_LEAFS_VARIABLE,
-                    concept_path: study.ontologyTerm.fullName
-
-                    )
+                    concept_path: study.ontologyTerm.fullName)
         }
     }
 

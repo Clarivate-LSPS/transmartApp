@@ -300,6 +300,7 @@ table.menuDetail th.menuVisited {
 	background-image: url('../images/fileexport.png');
 	text-decoration: none;
 }
+.greybutton.uploadfiles { background-image: url('../images/text.png'); }
 
 .greybutton.disabled {
 	cursor: default;
@@ -512,6 +513,13 @@ textarea#description, textarea#longDescription, input#description, input#longDes
 	left: 20%;
 	width: 60%;
 	height: 80%;
+}
+
+#uploadFilesOverlay {
+  top: 10%;
+  left: 20%;
+  width: 60%;
+  height: 80%;
 }
 
 #filter-browser {

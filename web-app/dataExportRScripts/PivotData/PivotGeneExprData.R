@@ -72,8 +72,7 @@ fileName
 {
 	print("SUBSESSTING DATA")
 	#Remove the PROBESET.ID, LOG2ED and ZSCORE column from the data.
-	dataFile <- subset(dataToPivot, delete=c(PROBESET.ID,LOG2ED,GENE_ID,GENE_SYMBOL))
-	dataFile$VALUE <- as.numeric(as.vector(dataFile$VALUE))
+	dataFile <- subset(dataToPivot, select=-c(PROBESET.ID,LOG2ED,GENE_ID,GENE_SYMBOL))
 	
 	print("MELTING DATA")
 	#Melt the data, leaving the 4 id columns.
@@ -91,8 +90,9 @@ fileName
 	colnames(finalData)[1] <- "PROBE ID"
 	
 	#Write the final data file.
-	write.matrix(finalData,fileName,sep = "\t")
-
+	#write.matrix(finalData,fileName,sep = "\t")
+    # Using write.table because write.matrix writes out trailing whitespace - see JIRA item TRANSREL-24
+    write.table(finalData,filename, sep = "\t", quote = FALSE, row.names = FALSE)
 }
 
 

@@ -349,7 +349,6 @@
     });
 
     function resizeAccordion() {
-        console.log("PLOP");
         var windowHeight = jQuery(window).height();
         jQuery('#sidebar').height(jQuery(window).height() - 30);
         jQuery('#main').height(jQuery(window).height() - 30);
@@ -540,11 +539,12 @@
 <tmpl:createFolderOverlay/>
 <tmpl:createStudyOverlay/>
 <tmpl:createProgramOverlay/>
+<g:render template="/uploadFiles/uploadFilesOverlay" plugin="folderManagement"/>
 <div id="divBrowsePopups" style="width:800px; display: none;">
 
 </div>
 
-<!--  Another DIV for the manhattan plot options. -->
+<!--  Note: this div, for the Manhattan Plot options dialog, has been moved to the transmart-gwas plugin -->
 <div id="divPlotOptions" style="width:300px; display: none;">
     <table class="columndetail">
         <tr>

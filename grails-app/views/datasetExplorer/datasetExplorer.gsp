@@ -75,6 +75,8 @@
     <link rel="stylesheet" type="text/css" href="${resource(dir: 'css/jquery/ui', file: 'jquery-ui-1.9.1.custom.css')}">
     <link rel="stylesheet" type="text/css" href="${resource(dir: 'css/jquery/skin', file: 'ui.dynatree.css')}">
     <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'datasetExplorer.css')}">
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'css', file:'folderManagement.css', plugin: 'folder-management')}">
+    <script type="text/javascript" src="${resource(dir:'js', file:'folderManagementDE.js', plugin: 'folder-management')}"></script>
 
     <!-- Adding these validation functions to get the Forest Plot to work. These might be able to be blended into the javascript object that controls the advanced workflow validation. -->
     <script type="text/javascript"
@@ -148,8 +150,14 @@
             HighDimDataType: '',
             SNPType: '',
             basePath: pageInfo.basePath,
-            hideAcrossTrialsPanel: '${grailsApplication.config.com.recomdata.datasetExplorer.hideAcrossTrialsPanel}',
-            metacoreAnalyticsEnabled: '${grailsApplication.config.com.thomsonreuters.transmart.metacoreAnalyticsEnable}',
+            hideAcrossTrialsPanel: ${!!grailsApplication.config.com.recomdata.datasetExplorer.hideAcrossTrialsPanel},
+            gridViewEnabled: ${!grailsApplication.config.ui.tabs.datasetExplorer.gridView.hide},
+            dataExportEnabled: ${!grailsApplication.config.ui.tabs.datasetExplorer.dataExport.hide},
+            dataExportJobsEnabled: ${!grailsApplication.config.ui.tabs.datasetExplorer.dataExportJobs.hide},
+            analysisJobsEnabled: ${!!grailsApplication.config.ui.tabs.datasetExplorer.analysisJobs.show},
+            workspaceEnabled: ${!grailsApplication.config.ui.tabs.datasetExplorer.workspace.hide},
+            sampleExplorerEnabled: ${!!grailsApplication.config.ui.tabs.sampleExplorer.show},
+            metacoreAnalyticsEnabled: ${!!grailsApplication.config.com.thomsonreuters.transmart.metacoreAnalyticsEnable},
             metacoreUrl: '${grailsApplication.config.com.thomsonreuters.transmart.metacoreURL}',
             AnalysisHasBeenRun: false,
             ResultSetRegionParams: {},
@@ -202,8 +210,10 @@
 <tmpl:/RWG/filterBrowser/>
 <div id="sidebartoggle">&nbsp;</div>
 
-<div id="noAnalyzeResults" style="display: none;">No subject-level results found.<br/><g:link controller="RWG"
-                                                                                              action="index">Switch to Browse view</g:link>
+<div id="noAnalyzeResults" style="display: none;">No subject-level results found.<br/>
+<g:if test="${!grailsApplication.config.ui.tabs.browse.hide}">
+    <g:link controller="RWG" action="index">Switch to Browse view</g:link>
+</g:if>
 </div>
 
 <div id="filter-div" style="display: none;"></div>

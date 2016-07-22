@@ -23,6 +23,7 @@ class ExportService {
     def jobResultsService
     def asyncJobService
     def quartzScheduler
+    def currentUserBean
     def grailsApplication
     def dataExportService
 
@@ -108,8 +109,11 @@ class ExportService {
 
             if (checkboxItem.dataTypeId) {
                 //Second item is the data type.
-                String currentDataType = checkboxItem.dataTypeId.trim()
-                subsetSelectedFilesMap.get(currentSubset)?.push(currentDataType)
+                String selectedFile = checkboxItem.dataTypeId.trim()
+                if (!(checkboxItem.fileType in ['.TSV', 'TSV'])) {
+                    selectedFile += checkboxItem.fileType
+                }
+                subsetSelectedFilesMap.get(currentSubset)?.push(selectedFile)
             }
         }
 
@@ -205,7 +209,7 @@ class ExportService {
 
         // --
 
-        jdm.put("userInContext", currentUser.targetSource.target)
+        jdm.put("userInContext", currentUserBean.targetSource.target)
 
         def jobDetail = new JobDetail(params.jobName, params.analysis, GenericJobExecutor.class)
         jobDetail.setJobDataMap(jdm)
@@ -223,10 +227,6 @@ class ExportService {
 
         jobResultsService[params.jobName]["StatusList"] = statusList
         asyncJobService.updateStatus(params.jobName, statusList[0])
-
-        def al = new AccessLog(username: userName, event: "${params.analysis}, Job: ${params.jobName}",
-                eventmessage: "", accesstime: new java.util.Date())
-        al.save()
 
         //TODO get the required input parameters for the job and validate them
         def rID1 = RequestValidator.nullCheck(params.result_instance_id1)
