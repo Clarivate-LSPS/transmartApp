@@ -3,6 +3,7 @@
  * @author $Author: mmcduffie $
  * @version $Revision: 9178 $
  */
+import org.transmart.searchapp.AuthUser;
 import org.transmart.searchapp.Role;
 
 /**
@@ -52,6 +53,16 @@ class RoleController {
             flash.message = "Role not found with id $params.id"
             redirect action: "list"
             return
+        }
+        AuthUser.metaClass.static.removeAll = { Role role ->
+            def usersWithRole = AuthUser.withCriteria {
+                authorities {
+                    eq('id', role.id)
+                }
+            }
+            usersWithRole.each { AuthUser user ->
+                user.removeFromAuthorities(role)
+            }
         }
 
         springSecurityService.deleteRole(authority)
