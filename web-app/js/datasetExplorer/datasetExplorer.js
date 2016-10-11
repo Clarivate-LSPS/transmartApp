@@ -2170,7 +2170,9 @@ function runAllQueries(callback, panel) {
         return;
     }
 
-    panel.body.unmask();
+    if (panel)
+        panel.body.unmask();
+    
     for (var i = 1; i <= GLOBAL.NumOfSubsets; i++) {
         if (isSubsetOnlyExclude(i)) {
             if (panel) {
