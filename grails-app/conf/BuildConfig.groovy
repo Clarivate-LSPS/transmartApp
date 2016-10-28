@@ -48,7 +48,7 @@ grails.project.dependency.resolution = {
 
             // -- Genome Browser plugin --
             //   to inclue the plugin, uncomment the following line
-            //   and see related comment block below 
+            //   and see related comment block below
             // mavenRepo "https://repo.thehyve.nl/content/repositories/public/"
         }
     } else {
@@ -153,7 +153,7 @@ grails.project.dependency.resolution = {
             //compile ':transmart-java:16.1'
             // -- Genome Browser plugin --
             //   to inclue the plugin, uncomment the following two lines
-            //   and see related comment block above 
+            //   and see related comment block above
             // runtime ':dalliance-plugin:unknown'
             // runtime ':transmart-mydas:unknown'
             runtime ':transmart-rest-api:16.1'

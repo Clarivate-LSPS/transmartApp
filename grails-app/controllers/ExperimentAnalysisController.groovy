@@ -10,6 +10,7 @@ import com.recomdata.export.ExportTableNew
 import com.recomdata.util.DomainObjectExcelHelper
 import com.recomdata.util.ElapseTimer
 import fm.FmFolder
+import fm.FmFolderAssociation
 import org.transmart.SearchResult
 import org.transmart.biomart.BioAssayAnalysis
 import org.transmart.biomart.Experiment
